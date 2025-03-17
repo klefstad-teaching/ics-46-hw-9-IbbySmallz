@@ -11,14 +11,14 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const string& str1, const string& str2, int d) {
-    if (abs((int)s1.size() - (int)s2.size()) > d) return false;
+    if (abs((int)str1.size() - (int)str2.size()) > d) return false;
 
-    int len1 = s1.size(), len2 = s2.size();
+    int len1 = str1.size(), len2 = str2.size();
 
     if (len1 == len2) {
         int diffCount = 0;
         for (int i = 0; i < len1; i++) {
-            if (s1[i] != s2[i]) {
+            if (str1[i] != str2[i]) {
                 diffCount++;
                 if (diffCount > 1) return false;
             }
@@ -26,8 +26,8 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
         return true;
     }
     else {
-        const string &longer  = (len1 > len2 ? s1 : s2);
-        const string &shorter = (len1 > len2 ? s2 : s1);
+        const string &longer  = (len1 > len2 ? str1 : str2);
+        const string &shorter = (len1 > len2 ? str2 : str1);
         int i = 0, j = 0, mismatch = 0;
         while (i < (int)longer.size() && j < (int)shorter.size()) {
             if (longer[i] != shorter[j]) {
@@ -44,7 +44,7 @@ bool edit_distance_within(const string& str1, const string& str2, int d) {
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-    return edit_distance_within(w1, w2, 1);
+    return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, 

@@ -8,28 +8,30 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     previous.assign(n, -1);
 
     using Node = pair<int,int>;
-    auto cmp = [](const Node& a, const Node& b) { return a.first > b.first; };
+    auto cmp = [](const Node& a, const Node& b) {
+        return a.first > b.first; // min‐heap by distance
+    };
     priority_queue<Node, vector<Node>, decltype(cmp)> pq(cmp);
 
     dist[source] = 0;
     pq.push({0, source});
 
-    vector<bool> visited(n, false);
-
     while (!pq.empty()) {
         auto [costSoFar, u] = pq.top();
         pq.pop();
 
-        if (visited[u]) continue;
-        visited[u] = true;
+        if (costSoFar > dist[u]) {
+            continue;
+        }
 
         for (auto &edge : G[u]) {
             int v = edge.dst;
             int w = edge.weight;
-            if (!visited[v] && dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
+            int newDist = dist[u] + w;
+            if (newDist < dist[v]) {
+                dist[v] = newDist;
                 previous[v] = u;
-                pq.push({dist[v], v});
+                pq.push({newDist, v});
             }
         }
     }
@@ -51,15 +53,13 @@ vector<int> extract_shortest_path(const vector<int>& distances, const vector<int
     return path;
 }
 
-void print_path(const vector<int>& v, int total)
+void print_path(const vector<int>& path, int total)
 {
-    if (v.empty()) {
-        cout << "No path found\n";
-        return;
+    for (size_t i = 0; i < path.size(); ++i) {
+        cout << path[i] << " ";
     }
-    for (size_t i = 0; i < v.size(); i++) {
-        if (i > 0) cout << " ";
-        cout << v[i];
-    }
-    cout << "\nTotal cost is " << total << endl;
+
+    cout << "\n";
+
+    cout << "Total cost is " << total << "\n";
 }

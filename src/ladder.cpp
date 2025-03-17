@@ -11,50 +11,40 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const string& str1, const string& str2, int d) {
-    if (std::abs((int)str1.size() - (int)str2.size()) > d) {
-        return false;
-    }
+    if (abs((int)s1.size() - (int)s2.size()) > d) return false;
 
-    return false;
-
-}
-
-bool is_adjacent(const string& word1, const string& word2) {
-    int len1 = (int)word1.size();
-    int len2 = (int)word2.size();
-    if (std::abs(len1 - len2) > 1) {
-        return false;
-    }
+    int len1 = s1.size(), len2 = s2.size();
 
     if (len1 == len2) {
         int diffCount = 0;
         for (int i = 0; i < len1; i++) {
-            if (word1[i] != word2[i]) {
+            if (s1[i] != s2[i]) {
                 diffCount++;
                 if (diffCount > 1) return false;
             }
         }
-        return (diffCount == 1);
+        return true;
     }
     else {
-        const string& longer  = (len1 > len2 ? word1 : word2);
-        const string& shorter = (len1 > len2 ? word2 : word1);
-
-        int i = 0, j = 0; 
-        int mismatchCount = 0;
+        const string &longer  = (len1 > len2 ? s1 : s2);
+        const string &shorter = (len1 > len2 ? s2 : s1);
+        int i = 0, j = 0, mismatch = 0;
         while (i < (int)longer.size() && j < (int)shorter.size()) {
             if (longer[i] != shorter[j]) {
-                mismatchCount++;
-                if (mismatchCount > 1) return false;
+                mismatch++;
+                if (mismatch > 1) return false;
                 i++;
             } else {
-                i++;
-                j++;
+                i++; j++;
             }
         }
-        mismatchCount += ( (int)longer.size() - i );
-        return (mismatchCount == 1);
+        mismatch += (longer.size() - i);
+        return (mismatch <= 1);
     }
+}
+
+bool is_adjacent(const string& word1, const string& word2) {
+    return edit_distance_within(w1, w2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, 
@@ -121,13 +111,14 @@ void load_words(set<string>& word_list, const string& file_name) {
 
 void print_word_ladder(const vector<string>& ladder) {
     if (ladder.empty()) {
-        cout << "No ladder found." << endl;
+        cout << "No word ladder found.\n";
     } else {
+        cout << "Word ladder found: ";
         for (size_t i = 0; i < ladder.size(); ++i) {
-            if (i > 0) cout << " -> ";
             cout << ladder[i];
+            if (i + 1 < ladder.size()) cout << " ";
         }
-        cout << endl;
+        cout << " \n";
     }
 }
 

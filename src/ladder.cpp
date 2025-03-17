@@ -77,7 +77,8 @@ static vector<string> generate_neighbors(const string& word) {
         temp.erase(temp.begin() + i);
         result.push_back(temp);
     }
-
+    sort(result.begin(), result.end());
+    result.erase(unique(result.begin(), result.end()), result.end());
     return result;
 }
 
